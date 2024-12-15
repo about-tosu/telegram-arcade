@@ -3,9 +3,10 @@ import configparser, threading, requests, json, re, time, sys
 from uuid import uuid4
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram import InlineQueryResultGame, ParseMode, InputTextMessageContent
+from telegram import InlineQueryResultGame, InputTextMessageContent
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, InlineQueryHandler, CommandHandler
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from telegram.constants import ParseMode
 
 class Global:
 	def __init__(self):
