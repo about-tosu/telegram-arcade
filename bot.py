@@ -2,9 +2,10 @@ import configparser, threading, requests, json, re, time, sys
 
 from uuid import uuid4
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update
+from telegram.ext import Application, CommandHandler, CallbackContext
 from telegram import InlineQueryResultGame, InputTextMessageContent
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, InlineQueryHandler, CommandHandler
+from telegram.ext import CommandHandler, CallbackQueryHandler, InlineQueryHandler, CommandHandler
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from telegram.constants import ParseMode
 
@@ -41,7 +42,7 @@ class GameHTTPRequestHandler(BaseHTTPRequestHandler):
 				Global.bot.set_game_score(params["uid"], params["score"], inline_message_id=params["imid"])	
 			else:
 				Global.bot.set_game_score(params["uid"], params["score"], message_id=params["mid"], chat_id=params["cid"])
-			self.send_response(200)
+	self.send_response(200)
 			self.end_headers()
 			self.wfile.write(b'Set score')
 		else:
@@ -49,8 +50,8 @@ class GameHTTPRequestHandler(BaseHTTPRequestHandler):
 			self.end_headers()
 			self.wfile.write(b'Invalid game!')
 
-def start(bot, update):
-	bot.send_game(update.message.chat_id, Global.featured)
+def start(update: Update, context: CallbackContext):
+    update.message.reply_text("Hello! Welcome to the bot.) 
 
 def error(bot, update, error):
 	print(update, error)
@@ -86,16 +87,17 @@ def main():
 	Global.host = config['DEFAULT']['HOST']
 	Global.port = config['DEFAULT']['PORT']
 	Global.featured = config['DEFAULT']['FEATURED']
-	updater = Updater(token=token)
+	application = Application.builder().token(token).build()
 
-	updater.dispatcher.add_handler(CommandHandler('start', start))
-	updater.dispatcher.add_handler(InlineQueryHandler(inlinequery))
-	updater.dispatcher.add_handler(CallbackQueryHandler(button))
-	updater.dispatcher.add_error_handler(error)
-	Global.bot = updater.bot
+
+	application.add_handler(CommandHandler("start", start)
+	application.add_handler(InlineQueryHandler(inlinequery))
+	application.add_handler(CallbackQueryHandler(button))
+	application.add_handler(error)
+	Global.bot = application.bot
 
 	print("Polling telegram")
-	updater.start_polling()
+	application.run_polling yg
 
 	print("Starting http server")	
 	http = HTTPServer((Global.host, int(Global.port)), GameHTTPRequestHandler)
