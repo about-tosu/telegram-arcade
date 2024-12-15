@@ -43,8 +43,11 @@ class GameHTTPRequestHandler(BaseHTTPRequestHandler):
 			else:
 				Global.bot.set_game_score(params["uid"], params["score"], message_id=params["mid"], chat_id=params["cid"])
 	self.send_response(200)
-			self.end_headers()
-			self.wfile.write(b'Set score')
+			class SomeClass:
+    def some_function(self):
+        self.some_method()
+        self.end_headers()  # Ensure it's correctly indented
+        self.wfile.write(b'Set score')
 		else:
 			self.send_response(404)
 			self.end_headers()
