@@ -51,7 +51,7 @@ class GameHTTPRequestHandler(BaseHTTPRequestHandler):
 			self.wfile.write(b'Invalid game!')
 
 def start(update: Update, context: CallbackContext):
-    update.message.reply_text("Hello! Welcome to the bot.) 
+    update.message.reply_text(update.message.chat_id, Global.featured) 
 
 def error(bot, update, error):
 	print(update, error)
